@@ -1,0 +1,33 @@
+---
+- name: Get the user running the script
+  command: whoami
+  register: user_running_script
+
+- name: Change ownership of /opt directory
+  file:
+    path: /opt
+    owner: "{{ user_running_script.stdout }}"
+    group: "{{ user_running_script.stdout }}"
+  become: true
+  become_method: sudo
+- name: "Install full repos"
+  git:
+    repo: "{{ item.repo }}"
+    dest: "{{ item.location }}"
+  loop:
+    - { repo: "https://github.com/Flangvik/SharpCollection", location: "/opt/SharpCollection" }
+    - { repo: "https://github.com/danielmiessler/SecLists", location: "/opt/SecLists" }
+    
+- name: Download files
+  get_url:
+    url: "{{ item.url }}"
+    dest: "/opt/"
+  loop:
+    - { url: "https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64", filename: "pspy64" }
+    - { url: "https://github.com/BloodHoundAD/BloodHound/releases/download/v4.3.1/BloodHound-linux-x64.zip", filename: "BloodHound-linux-x64.zip" }
+    - { url: "https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.2-alpha/ligolo-ng_agent_0.7.2-alpha_linux_amd64.tar.gz", filename: "ligolo-ng_agent_0.7.2-alpha_linux_amd64.tar.gz" }
+    - { url: "https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.2-alpha/ligolo-ng_agent_0.7.2-alpha_windows_amd64.zip", filename: "ligolo-ng_agent_0.7.2-alpha_windows_amd64.zip" }
+    - { url: "https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.2-alpha/ligolo-ng_proxy_0.7.2-alpha_linux_amd64.tar.gz", filename: "ligolo-ng_proxy_0.7.2-alpha_linux_amd64.tar.gz" }
+    - { url: "https://github.com/nicocha30/ligolo-ng/releases/download/v0.7.2-alpha/ligolo-ng_proxy_0.7.2-alpha_windows_amd64.zip", filename: "ligolo-ng_proxy_0.7.2-alpha_windows_amd64.zip" }
+    - { url: "https://github.com/peass-ng/PEASS-ng/releases/download/20240828-cfb5c8f6/linpeas.sh", filename: "linpeas.sh" }
+

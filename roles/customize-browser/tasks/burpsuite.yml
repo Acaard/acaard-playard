@@ -1,0 +1,32 @@
+---
+- name: "Check if certificate exists"
+  stat:
+    path: "/usr/local/share/ca-certificates/BurpCA.der"
+  register: burp_cert
+
+- name: "Copy the script"
+  copy: 
+    src: "{{ role_path }}/files/burpcert.sh"
+    dest: "/tmp/burpcert.sh"
+    mode: 0744
+  when: burp_cert.stat.exists == False
+
+- name: "Downloading CA Cert using the script"
+  shell:
+    /tmp/burpcert.sh
+  when: burp_cert.stat.exists == False
+
+- name: "Copying the CA cert"
+  copy:
+    src: "/tmp/cacert.der"
+    dest: "/usr/local/share/ca-certificates/BurpCA.der"
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+  become_method: sudo
+
+- name: "Getting the config file"
+  copy:
+    src: "{{ role_path }}/files/UserConfigCommunity.json"
+    dest: "{{ ansible_env.HOME }}/.BurpSuite/"

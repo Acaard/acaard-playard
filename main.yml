@@ -1,0 +1,13 @@
+---
+- name: "Deploying my machine"
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: "Reminder!"
+      debug:
+        msg: "Dont forget to do MasonInstallAll in neovim!!!!!, also do :TSInstall python"
+  roles:
+    - role: "roles/customize-system"
+    - role: "roles/tmux-config"
+    - role: "roles/install-tools"
+    - role: "roles/customize-browser"

@@ -1,0 +1,46 @@
+---
+- name: "Create a directory for the font"
+  file:
+    path: "{{ansible_env.HOME}}/.fonts"
+    state: "directory"
+    mode: '0755'
+
+- name: "Download the Hack Nerd Font if it does not exist"
+  command: "fc-list | grep HackNerd"
+  register: font_check
+  ignore_errors: yes
+
+- name: Debug font check result
+  debug:
+    msg: "Hack Nerd Font is already installed."
+  when: font_check.rc == 1
+      
+- name: "Download the Hack Nerd Font zip file"
+  get_url:
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.2.1/Hack.zip"
+    dest: "/tmp/Hack.zip"
+  when: font_check.rc != 1
+      
+- name: "Unzip the font file"
+  unarchive:
+    src: "/tmp/Hack.zip"
+    dest: "{{ansible_env.HOME}}/.fonts"
+    remote_src: "yes"
+  when: font_check.rc != 1
+      
+- name: "Update the font cache"
+  shell:
+    cmd: "fc-cache -fv"
+      
+- name: "Clean up the downloaded zip file"
+  file:
+    path: "/tmp/Hack.zip"
+    state: "absent"
+  when: font_check.rc != 1
+  
+- name: "Setting Fonts"
+  shell: |
+    gsettings set org.mate.interface document-font-name 'Hack Nerd Font Mono 11'
+    gsettings set org.mate.interface font-name 'Hack Nerd Font Mono 11'
+    gsettings set org.mate.interface monospace-font-name 'Hack Nerd Font Mono 11'
+    gsettings set org.mate.caja.desktop font 'Hack Nerd Font Mono 11'

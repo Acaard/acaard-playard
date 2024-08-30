@@ -1,0 +1,16 @@
+---
+- name: "Install Gems"
+  gem:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - logger
+    - winrm
+    - builder
+    - erubi
+    - rubyntlm
+    - winrm-fs
+    - evil-winrm
+  become: true
+  become_method: sudo
+

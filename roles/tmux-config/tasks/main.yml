@@ -1,0 +1,39 @@
+---
+- name: "Install Tmux and configure it"
+  apt:
+    name: tmux
+    state: present
+  become: true
+  become_method: sudo
+- name: "Copy config file"
+  copy:
+    src: "{{ role_path }}/files/.tmux.conf"
+    dest: "{{ ansible_env.HOME}}/.tmux.conf"
+
+- name: "Create the plugins dir"
+  file:
+    path: "{{ansible_env.HOME}}/.tmux/plugins"
+    state: directory
+    mode: '0755'
+
+- name: "clone TPM"
+  git:
+    repo: 'https://github.com/tmux-plugins/tpm'
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+
+- name: "Install sensible plugin"
+  git:
+    repo: "https://github.com/tmux-plugins/tmux-sensible.git"
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tmux-sensible"
+
+- name: "Install power plugin"
+  git:
+    repo: "https://github.com/wfxr/tmux-power.git"
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tmux-power"
+
+- name: "Install better-mouse-mode plugin"
+  git:
+    repo: "https://github.com/NHDaly/tmux-better-mouse-mode.git"
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tmux-better-mouse"
+
+

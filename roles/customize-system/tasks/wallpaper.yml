@@ -1,0 +1,11 @@
+---
+- name: "Copy the new wallpaper to the system"
+  copy:
+    src: "{{ role_path }}/files/Wallpaper.jpg"
+    dest: "{{ ansible_env.HOME }}/Pictures/Wallpaper.jpg"
+- name: "Setting new wallpaper"
+  dconf:
+    key: "/org/mate/desktop/background/picture-filename"
+    value: "'{{ ansible_env.HOME }}/Pictures/Wallpaper.jpg'"
+    state: present
+

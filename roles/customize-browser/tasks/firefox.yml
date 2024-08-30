@@ -1,0 +1,7 @@
+---
+- name: "Changing policies.json for firefox-esr customization"
+  template:
+    src: "{{ role_path }}/templates/policies.json.j2"
+    dest: "/usr/share/firefox-esr/distribution/policies.json"
+  become: true
+  become_method: sudo

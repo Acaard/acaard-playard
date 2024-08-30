@@ -1,0 +1,50 @@
+---
+- include_tasks: "wallpaper.yml"
+- include_tasks: "install-font.yml"
+
+- name: "Editing bashrc file"
+  copy:
+    src: "{{ role_path }}/files/.bashrc"
+    dest: "{{ ansible_env.HOME }}/.bashrc"
+
+- name: "Editing profile file"
+  copy:
+    src: "{{ role_path }}/files/.profile"
+    dest: "{{ ansible_env.HOME }}/.profile"
+
+
+- name: "Read current profiles"
+  dconf:
+    key: "/org/mate/terminal/global/profile-list"
+    state: "read"
+  register: "List"
+
+- name: "Setting List"
+  set_fact:
+    List: 
+      value: '["default"]'
+  when: List.value is none
+
+- name: "Adding our new profile"
+  set_fact:
+    new_List: "{{ List.value | regex_replace(']$', \", 'Acaard']\") }}"
+
+- name: "Writing the new profile list"
+  dconf:
+    key: "/org/mate/terminal/global/profile-list"
+    value: "{{ new_List }}"
+  when: "'Acaard' not in List.value"
+  
+- name: "Loading Acaard profile from dump"
+  shell:
+    cmd: "dconf load /org/mate/terminal/profiles/Acaard/ < {{ role_path }}/files/Acaard-dconf"
+  when: "'Acaard' not in List.value"
+
+
+- name: "Set icons"
+  shell:
+     cmd: "gsettings set org.mate.interface icon-theme Adwaita"
+
+- name: "Set new panel"
+  shell:
+    cmd: "dconf load /org/mate/panel/ < {{ role_path }}/files/new-panel"
