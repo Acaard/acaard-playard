@@ -12,8 +12,3 @@
 - name: "Insatll Nvchad"
   shell:
     cmd: "git clone -b v2.0 https://github.com/NvChad/NvChad ~/.config/nvim --depth 1"
-
-- name: "copy .config for nvim"
-  copy:
-    src: "{{ role_path }}/files/nvim-config/"
-    dest: "{{ansible_env.HOME}}/.config/nvim/"
