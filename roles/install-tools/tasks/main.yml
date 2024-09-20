@@ -4,5 +4,3 @@
 - include_tasks: pipx-tools.yml
 - include_tasks: gem-packages.yml
 - include_tasks: repo-tools.yml
-- include_tasks: install-nvim.yml
-- include_tasks: nvchad.yml

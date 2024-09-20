@@ -1,6 +1,0 @@
----
-- name: "Install nvim appimage"
-  get_url:
-    url : "https://github.com/neovim/neovim-releases/releases/download/v0.10.1/nvim.appimage"
-    dest: "{{ ansible_env.HOME}}/.local/bin/nvim"
-    mode: 0755
