@@ -116,7 +116,7 @@ alias fweb='ffuf -ic -w /opt/SecList/Discover/Web-Content/big.txt:FUZZ -u'
 alias crack='john --wordlist=/opt/wordlists/rockyou.txt'
 alias cme='netexec'
 alias ars='arsenal'
-alias st='mkdir nmap;mkdir exfiled;mkdir findings;mkdir exploits;touch loot;touch path;echo "ok making....";sleep 0.9;echo "Happy Hacking :D"'
+alias st='mkdir nmap;mkdir exfiled;mkdir findings;mkdir exploits;touch loot;touch path;echo "ok making....";sleep 0.5;echo "Happy Hacking :D"'
 alias cmdshell='cp /opt/cmdshell.php .'
 alias vi="nvim"
 alias vim="nvim"
